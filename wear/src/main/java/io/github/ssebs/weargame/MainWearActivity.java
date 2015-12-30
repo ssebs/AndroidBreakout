@@ -1,5 +1,6 @@
 package io.github.ssebs.weargame;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.wearable.activity.WearableActivity;
@@ -25,7 +26,8 @@ public class MainWearActivity extends WearableActivity {
         setAmbientEnabled();
 
         mContainerView = (BoxInsetLayout) findViewById(R.id.container);
-
+        Intent intent = new Intent(MainWearActivity.this, OGLActivity.class);
+        startActivity(intent);
     }
 
     @Override
