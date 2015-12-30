@@ -12,7 +12,7 @@ public class MyGLSurfaceView extends GLSurfaceView{
 
         // Create an OpenGL ES 2.0 context
         setEGLContextClientVersion(2);
-
+        super.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         mRenderer = new MyGLRenderer();
 
         // Set the Renderer for drawing on the GLSurfaceView
