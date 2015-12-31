@@ -81,7 +81,6 @@ public class Triangle {
     private final int mProgram; // Shader program handle
     private int mPositionHandle; // Positional data from shader
     private int mColorHandle;  // Color data from shader
-
     // Use to access and set the view transformation
     private int mMVPMatrixHandle;
 
@@ -113,13 +112,13 @@ public class Triangle {
     // number of coordinates per vertex in this array
     static final int COORDS_PER_VERTEX = 3;
     static float triangleCoords[] = {   // in counterclockwise order:
-            0.5f, -1f, 0.0f, // top
-            1f, -0.75f, 0.0f, // bottom left
-            0f, -0.75f, 0.0f  // bottom right
+            0.0f, -0.9622008459f, 0.0f, // top
+            -0.35f, -0.811004243f, 0.0f, // bottom left
+            0.35f, -0.811004243f, 0.0f  // bottom right
     };
 
     // Set color with red, green, blue and alpha (opacity) values
-    float color[] = {0.63671875f, 0.76953125f, 0.22265625f, 1.0f};
+    float color[] = {0.255f, 0.686f, 1.0f, 1.0f};
 
 
 }// end class

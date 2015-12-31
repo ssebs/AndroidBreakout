@@ -4,7 +4,6 @@ package io.github.ssebs.weargame;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
-import android.os.SystemClock;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -22,6 +21,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
     private float[] mRotationMatrix = new float[16];
 
     public volatile float mAngle;
+    public volatile float mTransX, mTransY;
 
 
     @Override
@@ -68,6 +68,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         // float angle = 0.090f * ((int) time);
         Matrix.setRotateM(mRotationMatrix, 0, mAngle, 0, 0, -1.0f);
 
+        Matrix.scaleM(mMVPMatrix, 0, 0.5f, 1f, 1);
+        Matrix.translateM(mMVPMatrix, 0, mTransX, mTransY, 0);
+
         // Combine the rotation matrix with the projection and camera view
         // Note that the mMVPMatrix factor *must be first* in order
         // for the matrix multiplication product to be correct.
@@ -104,5 +107,19 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         mAngle = angle;
     }
 
+    public float getmTransX() {
+        return mTransX;
+    }
 
+    public void setmTransX(float mTransX) {
+        this.mTransX = mTransX;
+    }
+
+    public float getmTransY() {
+        return mTransY;
+    }
+
+    public void setmTransY(float mTransY) {
+        this.mTransY = mTransY;
+    }
 }// end class
