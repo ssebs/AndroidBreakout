@@ -1,6 +1,7 @@
 package io.github.ssebs.weargame;
 
 import android.content.Intent;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.BoxInsetLayout;
@@ -12,16 +13,27 @@ import java.util.Calendar;
 public class MainWearActivity extends WearableActivity {
 
     private BoxInsetLayout mContainerView;
+    private GLSurfaceView mGLView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_wear);
+
+        Toast.makeText(MainWearActivity.this, "Press your home button to quit", Toast.LENGTH_SHORT).show();
+
         setAmbientEnabled();
+        mGLView = new MyGLSurfaceView(this);
+//        setContentView(mGLView);
+
 
         mContainerView = (BoxInsetLayout) findViewById(R.id.container);
-        Intent intent = new Intent(MainWearActivity.this, OGLActivity.class);
-        startActivity(intent);
+        mContainerView.addView(mGLView);
+
+        //Intent intent = new Intent(MainWearActivity.this, OGLActivity.class);
+        // startActivity(intent);
     }
 
     @Override
