@@ -11,7 +11,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class MyGLRenderer implements GLSurfaceView.Renderer{
 
     private Triangle mTriangle;
-    private Square   mSquare;
+    private Triangle mTri2, mTri3;
 
     // mMVPMatrix is an abbreviation for "Model View Projection Matrix"
     private final float[] mMVPMatrix = new float[16];
@@ -31,6 +31,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
         // initialize a triangle
         mTriangle = new Triangle();
+        mTri2 = new Triangle(new float[]{
+                -0.8f, 0.8f, 0.0f,
+                -0.35f, 0.6f, 0.0f,
+                -0.35f, 0.8f, 0.0f
+        });
+        mTri3 = new Triangle(new float[]{
+                -0.8f, 0.8f, 0.0f,
+                -0.8f, 0.6f, 0.0f,
+                -0.35f, 0.6f, 0.0f
+        });
     }
 
     @Override
@@ -58,27 +68,23 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         // Calculate the projection and view transformation
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
-//        // Create a rotation transformation for the triangle
-//        long time = SystemClock.uptimeMillis() % 4000L;
-//        float angle = 0.090f * ((int) time);
-//        Matrix.setRotateM(mRotationMatrix, 0, angle, 0, 0, -1.0f);
-
-        // Create a rotation for the triangle
-        // long time = SystemClock.uptimeMillis() % 4000L;
-        // float angle = 0.090f * ((int) time);
-        Matrix.setRotateM(mRotationMatrix, 0, mAngle, 0, 0, -1.0f);
-
-        Matrix.scaleM(mMVPMatrix, 0, 0.5f, 1f, 1);
-        Matrix.translateM(mMVPMatrix, 0, mTransX, mTransY, 0);
+        Matrix.setRotateM(mRotationMatrix, 0, mAngle, 0, 0, -1.0f);     // transforms
+        Matrix.scaleM(mMVPMatrix, 0, 0.5f, 1f, 1);                      // transforms
+        Matrix.translateM(mMVPMatrix, 0, mTransX, mTransY, 0);          // transforms
 
         // Combine the rotation matrix with the projection and camera view
         // Note that the mMVPMatrix factor *must be first* in order
         // for the matrix multiplication product to be correct.
         Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
 
-
         mTriangle.draw(scratch);
 
+        // Set the camera position (View matrix)
+        Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        // Calculate the projection and view transformation
+        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
+        mTri2.draw(mMVPMatrix);
+        mTri3.draw(mMVPMatrix);
         // Draw shape
         //  mTriangle.draw(mMVPMatrix);
 

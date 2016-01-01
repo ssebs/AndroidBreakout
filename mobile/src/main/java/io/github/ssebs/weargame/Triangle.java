@@ -9,6 +9,51 @@ import java.nio.FloatBuffer;
 
 public class Triangle {
 
+    float triangleCoords[] = {   // in counterclockwise order:
+            0.0f, -0.9622008459f, 0.0f, // top
+            -0.35f, -0.811004243f, 0.0f, // bottom left
+            0.35f, -0.811004243f, 0.0f  // bottom right
+    };
+
+    public Triangle(float newCoords[]) {
+        triangleCoords = newCoords;
+
+        // initialize vertex byte buffer for shape coordinates
+        // (number of coordinate values * 4 bytes per float)
+        ByteBuffer bb = ByteBuffer.allocateDirect(triangleCoords.length * 4);
+        /*  A Byte buffer is a streamable array of bytes (data turned into binary) */
+
+        // use the device hardware's native byte order
+        bb.order(ByteOrder.nativeOrder());
+        /* needed, just copy and paste later on */
+
+
+        // create a floating point buffer from the ByteBuffer
+        vertexBuffer = bb.asFloatBuffer();
+        /* This sets the Float buffer to the size of the bytebuffer */
+
+        // add the coordinates to the FloatBuffer
+        vertexBuffer.put(triangleCoords);
+
+
+        // set the buffer to read the first coordinate
+        vertexBuffer.position(0);
+
+        int vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
+        /* Returns the shader handle /\  \/ */
+        int fragmentShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+
+        // create empty OpenGL ES Program for the shaders
+        mProgram = GLES20.glCreateProgram();
+        GLES20.glAttachShader(mProgram, vertexShader);
+        GLES20.glAttachShader(mProgram, fragmentShader);
+        GLES20.glLinkProgram(mProgram);
+
+    }
+
+    /**
+     * Default
+     */
     public Triangle() {
         // initialize vertex byte buffer for shape coordinates
         // (number of coordinate values * 4 bytes per float)
@@ -111,11 +156,6 @@ public class Triangle {
 
     // number of coordinates per vertex in this array
     static final int COORDS_PER_VERTEX = 3;
-    static float triangleCoords[] = {   // in counterclockwise order:
-            0.0f, -0.9622008459f, 0.0f, // top
-            -0.35f, -0.811004243f, 0.0f, // bottom left
-            0.35f, -0.811004243f, 0.0f  // bottom right
-    };
 
     // Set color with red, green, blue and alpha (opacity) values
     float color[] = {0.255f, 0.686f, 1.0f, 1.0f};
