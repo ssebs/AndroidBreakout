@@ -8,10 +8,10 @@ import android.opengl.Matrix;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class MyGLRenderer implements GLSurfaceView.Renderer{
+public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private Triangle mTriangle;
-    private Triangle mTri2, mTri3;
+    private Rectangle[] mRects;
 
     // mMVPMatrix is an abbreviation for "Model View Projection Matrix"
     private final float[] mMVPMatrix = new float[16];
@@ -31,16 +31,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
         // initialize a triangle
         mTriangle = new Triangle();
-        mTri2 = new Triangle(new float[]{
-                -0.8f, 0.8f, 0.0f,
-                -0.35f, 0.6f, 0.0f,
-                -0.35f, 0.8f, 0.0f
-        });
-        mTri3 = new Triangle(new float[]{
-                -0.8f, 0.8f, 0.0f,
-                -0.8f, 0.6f, 0.0f,
-                -0.35f, 0.6f, 0.0f
-        });
+
+
+        mRects = new Rectangle[3];
+        for (int i = 0; i < mRects.length; i++) {
+            mRects[i] = new Rectangle();
+        }
+
     }
 
     @Override
@@ -72,6 +69,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         Matrix.scaleM(mMVPMatrix, 0, 0.5f, 1f, 1);                      // transforms
         Matrix.translateM(mMVPMatrix, 0, mTransX, mTransY, 0);          // transforms
 
+
         // Combine the rotation matrix with the projection and camera view
         // Note that the mMVPMatrix factor *must be first* in order
         // for the matrix multiplication product to be correct.
@@ -83,16 +81,22 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
         // Calculate the projection and view transformation
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
-        mTri2.draw(mMVPMatrix);
-        mTri3.draw(mMVPMatrix);
+
         // Draw shape
         //  mTriangle.draw(mMVPMatrix);
+
+        for (int i = 0; i < mRects.length; i++) {
+            Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+            // Calculate the projection and view transformation
+            Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
+            Matrix.translateM(mMVPMatrix, 0, (0.35f * (float) i) - 0.35f, 0.5f, 0);          // transforms
+            mRects[i].draw(mMVPMatrix);
+        }
 
     }
 
 
-
-    public static int loadShader(int type, String shaderCode){
+    public static int loadShader(int type, String shaderCode) {
 
         // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
         // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
